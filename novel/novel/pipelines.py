@@ -13,16 +13,19 @@ class NovelPipeline(object):
         self.collection = self.db['book']
 
     def process_item(self, item, spider):
-        book ={
-            'book_id': item['book_id'],
-            'book': item['book'],
-            'author': item['author'],
-            'category': item['category'],
-            'status': item['status'],
-            'count': item['count'],
-            'profile': item['profile'],
-            'chapter_name': item['chapter_name'],
-            'chapter_content': item['chapter_content']
-        }
-        self.collection.save(book)
-        return item
+        if item.get('book'):
+            book ={
+                'book_id': item['book_id'],
+                'book': item['book'],
+                'author': item['author'],
+                'category': item['category'],
+                'status': item['status'],
+                'count': item['count'],
+                'profile': item['profile'],
+                'chapter_list': item['chapter_list']
+            }
+            self.collection.save(book)
+            return item
+        else:
+            if item.get('chapter_number'):
+                self.db[item.get('book_id')].insert_one(dict(item))

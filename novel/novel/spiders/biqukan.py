@@ -24,15 +24,6 @@ class BiqukanSpider(RedisCrawlSpider):
         items['status'] = re.findall('<span>状态：(.*?)</span>',response.text, re.S )[0]
         items['count'] = re.findall('<span>字数：(.*?)</span>',response.text, re.S )[0]
         items['profile'] = re.findall('<span>简介：</span>(.*?)<br>',response.text, re.S )[0]
-        chapter_list = response.xpath('//dd/a/@href').extract()[12:]
-        for url in chapter_list:
-            fullUrl = 'https://www.biqukan.com' + url
-            yield scrapy.Request(url=fullUrl, callback=self.parse_chapter, meta={'items': items})
-
-
-    def parse_chapter(self, response):
-        items = response.meta.get('items')
-        items['chapter_name'] = response.xpath('//h1/text()').extract_first()
-        items['chapter_content'] = '\n'.join(response.xpath('//div[@id="content"]/text()').extract()[:-2]).replace('\u3000', '')
+        items['chapter_list'] = response.xpath('//dd/a/@href').extract()[12:]
         yield items
         

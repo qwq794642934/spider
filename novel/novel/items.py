@@ -16,6 +16,12 @@ class NovelItem(scrapy.Item):
     status = scrapy.Field()
     count = scrapy.Field()
     profile = scrapy.Field()
+    chapter_list = scrapy.Field()
+    pass
+
+class NovelContentItem(scrapy.Item):
+    book_id = scrapy.Field()
+    chapter_number = scrapy.Field()
     chapter_name = scrapy.Field()
     chapter_content = scrapy.Field()
     pass
